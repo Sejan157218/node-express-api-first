@@ -1,7 +1,11 @@
-const express = require('express')
-const app = express()
+const express = require('express');
+const cors = require('cors');
+const app = express();
 const port = 9000;
 
+
+app.use(cors());
+app.use(express.json());
 
 app.get('/',(req,res)=>{
     res.send("Hello From My first ever node 1" )
@@ -14,19 +18,26 @@ const users=[
     {id:3,name:"sejan3",email:"sejan3@gmail.com",phone:01777777777},
     {id:4,name:"sejan4",email:"sejan4@gmail.com",phone:01777777777},
     {id:5,name:"sejan5",email:"sejan5@gmail.com",phone:01777777777},
-    {id:5,name:"sejan6",email:"sejan6@gmail.com",phone:01777777777},
-    {id:6,name:"sejan7",email:"sejan7@gmail.com",phone:01777777777},
+    {id:6,name:"sejan6",email:"sejan6@gmail.com",phone:01777777777},
+    {id:7,name:"sejan7",email:"sejan7@gmail.com",phone:01777777777},
 ]
 app.get('/users',(req,res)=>{
     const searchValue = req.query.search;
     if(searchValue){
-        const userSearchResult = users.filter(user=>user.name.toLocaleLowerCase().includes(searchValue));
+        const userSearchResult = users.filter(user=>user.name.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()));
         res.send(userSearchResult)
     }
     else{
         res.send(users)
     }
     
+})
+
+app.post('/users',(req,res)=>{
+   const newUser= req.body;
+   newUser.id = users.length;
+   users.push(newUser)
+    res.json(newUser)
 })
 
 app.get('/users/:id',(req,res)=>{
